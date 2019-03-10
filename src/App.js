@@ -1,59 +1,71 @@
-import React, { Component } from 'react';
-import Item from './Item';
+import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
+import ThemeContext from './ThemeContext';
+import landscape from './landscape.jpg';
+import portrait from './portrait.jpg';
 
-class App extends Component {
-  state = { todos: [] }
+const useInput = () => {
+  const [value, setValue] = useState('');
 
-  componentDidMount() {
-    const storedTodos = window.localStorage.getItem('todos');
-    this.setState({ todos: storedTodos ? storedTodos.split(',') : [] })
-  }
+  const handleChange = event => {
+    setValue(event.target.value);
+  };
 
-  add = (event) => {
-    const { todos, input } = this.state;
+  return [handleChange, value];
+};
+
+const App = () => {
+  const [onInputChange, input] = useInput();
+  const [onNameChange, name] = useInput();
+  const [todos, setTodos] = useState([]);
+  const [background, setBackground] = useState(landscape);
+  const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    document.title = `You have ${todos.length} things to do`;
+  }, [todos]);
+
+  useEffect(() => {
+    loadBackground();
+    window.addEventListener('resize', loadBackground);
+    return () => window.removeEventListener('resize', loadBackground);
+  }, []);
+
+  const loadBackground = () => {
+    setBackground(window.innerWidth > 700 ? landscape : portrait);
+  };
+
+  const handleSubmit = event => {
     event.preventDefault();
-    const newTodos = [...todos, input]
-    this.setState({ todos: newTodos, input: '' });
-    window.localStorage.setItem('todos', newTodos);
-  }
+    setTodos([...todos, input]);
+  };
 
-  delete = (todo) => {
-    const { todos } = this.state;
-    todos.splice(todos.indexOf(todo), 1);
-    this.setState({ todos });
-    window.localStorage.setItem('todos', todos);
-  }
-
-  edit = (todo, newValue) => {
-    const { todos } = this.state;
-    todos[todos.indexOf(todo)] = newValue;
-    this.setState({ todos });
-    window.localStorage.setItem('todos', todos);
-  }
-
-  render() {
-    const { input, todos } = this.state;
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 data-cy="header" className="App-logo">✨SYSON✨<br/>✨CONF✨</h1>
-          <form data-cy="add-form" className="App-add" onSubmit={this.add}>
-            <input
-              value={input}
-              onChange={e => this.setState({ input: e.target.value })}
-            />
-            <button className="save">Add</button>
-          </form>
-          <ul>
-            {todos.map((todo, i) => (
-              <Item key={i} todo={todo} edit={this.edit} remove={this.delete} />
-            ))}
-          </ul>
-        </header>
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className={`App ${theme}`}
+      style={{ backgroundImage: `url('${background}')` }}
+    >
+      <label>Your name</label>
+      <input value={name} onChange={onNameChange} />
+      <h1 data-cy='header' className='App-logo'>
+        ✨ SYSON ✨
+        <br />
+        🎣 HOOK 🎣‍
+      </h1>
+      <h2>Welcome {name}</h2>
+      <form data-cy='add-form' className='App-add' onSubmit={handleSubmit}>
+        <input value={input} onChange={onInputChange} />
+        <button className='save'>Add</button>
+      </form>
+      <ul>
+        {todos.map((todo, i) => (
+          <li key={i}>
+            <span>{todo}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default App;

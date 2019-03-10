@@ -1,23 +1,28 @@
 .App {
   text-align: center;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #37435b;
+  background-color: #d9d9dd;
+  font-weight: bolder;
+}
+
+.App.pink {
+  color: rgb(57, 0, 57);
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .App-logo {
   position: absolute;
   top: 20px;
   animation: App-logo-pulse infinite 5s ease-in-out;
-}
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
@@ -28,13 +33,14 @@
   0% {
   }
   50% {
-    transform: scale(1.2)
+    transform: scale(1.2);
   }
   100% {
   }
 }
 
-.delete,.edit {
+.delete,
+.edit {
   background: none;
   border: none;
   cursor: pointer;

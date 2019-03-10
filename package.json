@@ -9,9 +9,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -21,8 +19,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "cypress": "3.1.0"
-  }
+  ]
 }
