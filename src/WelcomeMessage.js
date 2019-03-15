@@ -3,5 +3,5 @@ import AuthContext from './AuthContext';
 
 export default () => {
   const { auth } = useContext(AuthContext);
-  return <h2>Welcome {auth}</h2>;
+  return <h2>Welcome {auth.userName}</h2>;
 };

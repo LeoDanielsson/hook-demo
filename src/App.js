@@ -8,10 +8,10 @@ import WelcomeMessage from './WelcomeMessage';
 import Auth from './Auth';
 
 const App = () => {
-  const [onInputChange, input] = useInput();
+  const [todoInput, onTodoInputChange] = useInput();
   const [todos, setTodos] = useState([]);
   const [background, setBackground] = useState(landscape);
-  const [auth, setAuth] = useState('Anonymous');
+  const [auth, setAuth] = useState({ userName: 'Anonymous' });
 
   useEffect(() => {
     document.title = `You have ${todos.length} things to do`;
@@ -29,11 +29,15 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    setTodos([...todos, input]);
+    setTodos([...todos, todoInput]);
+  };
+
+  const logIn = userName => {
+    setAuth({ userName });
   };
 
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={{ auth, logIn }}>
       <div className='App'>
         <h1 data-cy='header' className='App-logo'>
           ✨ SYSON ✨
@@ -43,7 +47,7 @@ const App = () => {
         <Auth />
         <WelcomeMessage />
         <form data-cy='add-form' className='App-add' onSubmit={handleSubmit}>
-          <input value={input} onChange={onInputChange} />
+          <input value={todoInput} onChange={onTodoInputChange} />
           <button className='save'>Add</button>
         </form>
         <ul>
