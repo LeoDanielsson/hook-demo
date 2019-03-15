@@ -1,25 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import AuthContext from './AuthContext';
 import './App.css';
-import ThemeContext from './ThemeContext';
 import landscape from './landscape.jpg';
 import portrait from './portrait.jpg';
-
-const useInput = () => {
-  const [value, setValue] = useState('');
-
-  const handleChange = event => {
-    setValue(event.target.value);
-  };
-
-  return [handleChange, value];
-};
+import useInput from './useInput';
+import WelcomeMessage from './WelcomeMessage';
+import Auth from './Auth';
 
 const App = () => {
   const [onInputChange, input] = useInput();
-  const [onNameChange, name] = useInput();
   const [todos, setTodos] = useState([]);
   const [background, setBackground] = useState(landscape);
-  const theme = useContext(ThemeContext);
+  const [auth, setAuth] = useState('Anonymous');
 
   useEffect(() => {
     document.title = `You have ${todos.length} things to do`;
@@ -41,30 +33,28 @@ const App = () => {
   };
 
   return (
-    <div
-      className={`App ${theme}`}
-      style={{ backgroundImage: `url('${background}')` }}
-    >
-      <label>Your name</label>
-      <input value={name} onChange={onNameChange} />
-      <h1 data-cy='header' className='App-logo'>
-        ✨ SYSON ✨
-        <br />
-        🎣 HOOK 🎣‍
-      </h1>
-      <h2>Welcome {name}</h2>
-      <form data-cy='add-form' className='App-add' onSubmit={handleSubmit}>
-        <input value={input} onChange={onInputChange} />
-        <button className='save'>Add</button>
-      </form>
-      <ul>
-        {todos.map((todo, i) => (
-          <li key={i}>
-            <span>{todo}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      <div className='App'>
+        <h1 data-cy='header' className='App-logo'>
+          ✨ SYSON ✨
+          <br />
+          🎣 HOOK 🎣‍
+        </h1>
+        <Auth />
+        <WelcomeMessage />
+        <form data-cy='add-form' className='App-add' onSubmit={handleSubmit}>
+          <input value={input} onChange={onInputChange} />
+          <button className='save'>Add</button>
+        </form>
+        <ul>
+          {todos.map((todo, i) => (
+            <li data-cy='item'>
+              <span>{todo}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </AuthContext.Provider>
   );
 };
 
